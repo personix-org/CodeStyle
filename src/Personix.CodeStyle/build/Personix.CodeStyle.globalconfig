@@ -1,0 +1,33 @@
+# Personix shared code style — distributed via the Personix.CodeStyle package.
+#
+# This is a *global* AnalyzerConfig: it applies to every file in the consuming project without
+# living on disk in that repository. A repository-local .editorconfig still wins over it, which is
+# deliberate — a project can opt out of a specific rule when it has a reason to.
+is_global = true
+global_level = 100
+
+# --- Braces -----------------------------------------------------------------
+# Every control-flow statement gets a block, including single-line ones. Raised to error so that
+# an unbraced if fails the build rather than being underlined in the editor and merged anyway.
+csharp_prefer_braces = true
+dotnet_diagnostic.IDE0011.severity = error
+
+# --- Namespaces -------------------------------------------------------------
+csharp_style_namespace_declarations = file_scoped
+dotnet_diagnostic.IDE0161.severity = warning
+
+# Folders are allowed to group files without forcing a matching namespace. Splitting types into
+# subfolders is an organisational choice — pushing every folder into the namespace would make
+# consumers write several usings for what is one coherent API surface.
+dotnet_diagnostic.IDE0130.severity = none
+
+# --- Unused code ------------------------------------------------------------
+# Unused usings and unread private members are noise that hides real problems.
+dotnet_diagnostic.IDE0005.severity = warning
+dotnet_diagnostic.IDE0051.severity = warning
+dotnet_diagnostic.IDE0052.severity = warning
+
+# --- Correctness ------------------------------------------------------------
+# Empty catch blocks and unused parameters are usually a mistake rather than intent.
+dotnet_diagnostic.CA1031.severity = none
+dotnet_diagnostic.IDE0060.severity = suggestion

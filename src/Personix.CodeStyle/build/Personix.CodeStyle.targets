@@ -1,0 +1,49 @@
+<Project>
+
+  <!--
+    Every published package must carry a README. NuGet already fails when PackageReadmeFile points
+    at a file that does not exist (NU5039), but it says nothing when the property was never set at
+    all — which is how a package reaches nuget.org with a blank description page. This closes that
+    gap by failing the pack instead.
+  -->
+  <!--
+    Every published package carries the repository's docs/README.md. The item is created here,
+    during pack, rather than being declared in each csproj — a None item pointing outside the
+    project directory shows up as a child of the project in Rider and Visual Studio no matter what
+    Visible says, which puts the file in the tree twice. Adding it at pack time keeps the IDE view
+    matching the disk: README lives in docs/ and appears nowhere else.
+  -->
+  <PropertyGroup Condition="'$(IsPackable)' == 'true'">
+    <PersonixReadmePath>$([MSBuild]::NormalizePath('$(MSBuildProjectDirectory)', '..', '..', 'docs', 'README.md'))</PersonixReadmePath>
+  </PropertyGroup>
+
+  <Target Name="PersonixAddPackageReadme" BeforeTargets="_GetPackageFiles;GenerateNuspec" Condition="'$(IsPackable)' == 'true'">
+    <Error Condition="!Exists('$(PersonixReadmePath)')"
+           Code="PERSONIX001"
+           Text="Package '$(PackageId)' is packable but has no docs/README.md (looked for '$(PersonixReadmePath)'). Every published package needs one — GitHub renders it on the repository front page and NuGet shows it on the package page." />
+
+    <PropertyGroup>
+      <PackageReadmeFile>README.md</PackageReadmeFile>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <None Include="$(PersonixReadmePath)" Pack="true" PackagePath="\" Visible="false" />
+    </ItemGroup>
+  </Target>
+
+  <!--
+    Shouldly for assertions, NSubstitute for test doubles, across every Personix test project.
+    Mixing libraries means each test file has to be read on its own terms. The two banned here also
+    carry baggage: FluentAssertions is commercially licensed from version 8, and Moq 4.20 shipped
+    SponsorLink, which harvested developer e-mail addresses from local git config.
+  -->
+  <Target Name="PersonixEnsureTestLibraries" BeforeTargets="CoreCompile" Condition="'$(IsTestProject)' == 'true'">
+    <Error Condition="'%(PackageReference.Identity)' == 'FluentAssertions' Or '%(PackageReference.Identity)' == 'AwesomeAssertions' Or '%(PackageReference.Identity)' == 'NFluent'"
+           Code="PERSONIX002"
+           Text="Test project '$(MSBuildProjectName)' references %(PackageReference.Identity). Personix test projects assert with Shouldly — replace the reference and rewrite x.Should().Be(y) as x.ShouldBe(y)." />
+    <Error Condition="'%(PackageReference.Identity)' == 'Moq' Or '%(PackageReference.Identity)' == 'FakeItEasy'"
+           Code="PERSONIX003"
+           Text="Test project '$(MSBuildProjectName)' references %(PackageReference.Identity). Personix test projects use NSubstitute for test doubles — replace the reference and rewrite new Mock&lt;T&gt;() as Substitute.For&lt;T&gt;()." />
+  </Target>
+
+</Project>

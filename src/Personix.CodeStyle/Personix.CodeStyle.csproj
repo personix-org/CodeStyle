@@ -1,0 +1,45 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <IsPackable>true</IsPackable>
+    <PackageId>Personix.CodeStyle</PackageId>
+    <Version>1.0.0</Version>
+    <Authors>Pavel Kudrna</Authors>
+    <Company>Personix</Company>
+    <Product>Personix.CodeStyle</Product>
+    <Description>Shared code style rules for Personix .NET projects, delivered as a global AnalyzerConfig. Referencing the package turns the agreed style rules — braces on every control-flow statement among them — into build errors, so the rules hold in CI instead of relying on everyone having the same editor settings.</Description>
+    <Copyright>Copyright (c) 2026 Personix</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/personix-org/CodeStyle</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/personix-org/CodeStyle</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>codestyle;analyzers;editorconfig;globalconfig;code-quality;build</PackageTags>
+    <Deterministic>true</Deterministic>
+
+    <!-- Build assets only: the package ships configuration, not an assembly. -->
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <DevelopmentDependency>true</DevelopmentDependency>
+    <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
+    <NoWarn>$(NoWarn);NU5128</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="build\Personix.CodeStyle.props" Pack="true" PackagePath="build\" />
+    <None Include="build\Personix.CodeStyle.targets" Pack="true" PackagePath="build\" />
+    <None Include="build\Personix.CodeStyle.globalconfig" Pack="true" PackagePath="build\" />
+  </ItemGroup>
+
+  <!--
+    This package cannot consume its own build targets, so the README handling from
+    Personix.CodeStyle.targets is repeated here. Keep the two in step.
+  -->
+  <Target Name="PersonixAddPackageReadme" BeforeTargets="_GetPackageFiles;GenerateNuspec">
+    <PropertyGroup>
+      <PackageReadmeFile>README.md</PackageReadmeFile>
+    </PropertyGroup>
+    <ItemGroup>
+      <None Include="$(MSBuildProjectDirectory)\..\..\docs\README.md" Pack="true" PackagePath="\" Visible="false" />
+    </ItemGroup>
+  </Target>
+
+</Project>
