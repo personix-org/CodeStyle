@@ -3,7 +3,7 @@
   <PropertyGroup>
     <IsPackable>true</IsPackable>
     <PackageId>Personix.CodeStyle</PackageId>
-    <Version>1.0.0</Version>
+    <Version>1.0.1</Version>
     <Authors>Pavel Kudrna</Authors>
     <Company>Personix</Company>
     <Product>Personix.CodeStyle</Product>
