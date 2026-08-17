@@ -47,6 +47,22 @@
     <Error Condition="'%(PackageReference.Identity)' == 'NSubstitute' Or '%(PackageReference.Identity)' == 'FakeItEasy'"
            Code="PERSONIX003"
            Text="Test project '$(MSBuildProjectName)' references %(PackageReference.Identity). Personix test projects use Moq for test doubles — replace the reference and rewrite Substitute.For&lt;T&gt;() as new Mock&lt;T&gt;()." />
+
+    <!--
+      Banning the alternatives is not the same as having the agreed one. A project asserting with
+      bare Assert.Equal breaks none of the rules above and still reads unlike every other test in
+      the estate, so the reference is required rather than merely preferred.
+
+      Only Shouldly is required, not Moq: every test asserts, but only some need a test double, and
+      demanding one would mean referencing a package the project never calls.
+    -->
+    <ItemGroup>
+      <PersonixShouldlyReference Include="@(PackageReference)" Condition="'%(Identity)' == 'Shouldly'" />
+    </ItemGroup>
+
+    <Error Condition="'@(PersonixShouldlyReference)' == ''"
+           Code="PERSONIX004"
+           Text="Test project '$(MSBuildProjectName)' does not reference Shouldly. Personix test projects assert with it — add the reference and write x.ShouldBe(y) instead of Assert.Equal(y, x)." />
   </Target>
 
 </Project>
