@@ -32,21 +32,30 @@
   </Target>
 
   <!--
-    Shouldly for assertions, Moq for test doubles, across every Personix test project. Mixing
-    libraries means each test file has to be read on its own terms. FluentAssertions is banned for
-    a reason of its own: it is commercially licensed from version 8.
+    Moq is the test double library across Personix, and the alternatives are refused everywhere
+    rather than in test projects alone. Scoping the ban to IsTestProject would leave the rule silent
+    exactly where an unwanted reference is least likely to be noticed — a helper or fixture project
+    that never set the flag. "Nowhere" is easier to hold than "nowhere except over there".
 
     Moq was banned here until 1.0.1 over SponsorLink, which harvested developer e-mail addresses
     from local git config. That shipped in 4.20.0 alone and was pulled in 4.20.2, so the reason had
     outlived itself while the rule kept failing builds that followed the agreed convention.
   -->
+  <Target Name="PersonixBanRivalTestDoubleLibraries" BeforeTargets="CoreCompile">
+    <Error Condition="'%(PackageReference.Identity)' == 'NSubstitute' Or '%(PackageReference.Identity)' == 'FakeItEasy'"
+           Code="PERSONIX003"
+           Text="Project '$(MSBuildProjectName)' references %(PackageReference.Identity). Personix uses Moq for test doubles — replace the reference and rewrite Substitute.For&lt;T&gt;() as new Mock&lt;T&gt;()." />
+  </Target>
+
+  <!--
+    Shouldly for assertions across every Personix test project. Mixing libraries means each test file
+    has to be read on its own terms. FluentAssertions is banned for a reason of its own: it is
+    commercially licensed from version 8.
+  -->
   <Target Name="PersonixEnsureTestLibraries" BeforeTargets="CoreCompile" Condition="'$(IsTestProject)' == 'true'">
     <Error Condition="'%(PackageReference.Identity)' == 'FluentAssertions' Or '%(PackageReference.Identity)' == 'AwesomeAssertions' Or '%(PackageReference.Identity)' == 'NFluent'"
            Code="PERSONIX002"
            Text="Test project '$(MSBuildProjectName)' references %(PackageReference.Identity). Personix test projects assert with Shouldly — replace the reference and rewrite x.Should().Be(y) as x.ShouldBe(y)." />
-    <Error Condition="'%(PackageReference.Identity)' == 'NSubstitute' Or '%(PackageReference.Identity)' == 'FakeItEasy'"
-           Code="PERSONIX003"
-           Text="Test project '$(MSBuildProjectName)' references %(PackageReference.Identity). Personix test projects use Moq for test doubles — replace the reference and rewrite Substitute.For&lt;T&gt;() as new Mock&lt;T&gt;()." />
 
     <!--
       Banning the alternatives is not the same as having the agreed one. A project asserting with

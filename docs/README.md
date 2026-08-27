@@ -9,7 +9,7 @@ settings. Changing a rule means bumping one package version, not editing nine re
 ## Installation
 
 ```xml
-<PackageReference Include="Personix.CodeStyle" Version="1.0.0" PrivateAssets="all" />
+<PackageReference Include="Personix.CodeStyle" Version="1.0.2" PrivateAssets="all" />
 ```
 
 `PrivateAssets="all"` keeps the rules from flowing to consumers of your package — they govern your
@@ -28,6 +28,21 @@ repository at once.
 
 Braces are an error rather than a warning on purpose: the failure mode is a second statement added
 under an unbraced `if`, which silently falls outside the condition and reads as if it did not.
+
+Alongside the analyzer rules, the package fails the build on a handful of conventions that no
+analyzer covers. All of them are errors, because each describes something that is either agreed or
+not — there is no useful middle setting.
+
+| Rule | Applies to | Meaning |
+|---|---|---|
+| `PERSONIX001` | packable projects | A published package must carry `docs/README.md`. The package is wired up as the NuGet readme automatically, so no csproj needs to set `PackageReadmeFile`. |
+| `PERSONIX002` | test projects | FluentAssertions, AwesomeAssertions and NFluent are refused. FluentAssertions is commercially licensed from version 8. |
+| `PERSONIX003` | **every project** | NSubstitute and FakeItEasy are refused. Moq is the test double library across Personix. |
+| `PERSONIX004` | test projects | A test project must reference Shouldly. Banning the alternatives is not the same as having the agreed one. |
+
+`PERSONIX003` deliberately ignores `IsTestProject`. Scoping it to test projects would leave the rule
+silent exactly where an unwanted reference is least likely to be noticed — a helper or fixture
+project that never set the flag.
 
 ## What it does not cover
 

@@ -3,7 +3,8 @@
   <PropertyGroup>
     <IsPackable>true</IsPackable>
     <PackageId>Personix.CodeStyle</PackageId>
-    <Version>1.0.1</Version>
+    <Version>1.0.2</Version>
+    <PackageReleaseNotes>1.0.2 — PERSONIX003 (NSubstitute and FakeItEasy are refused, Moq is the convention) now applies to every project rather than to test projects alone.</PackageReleaseNotes>
     <Authors>Pavel Kudrna</Authors>
     <Company>Personix</Company>
     <Product>Personix.CodeStyle</Product>
