@@ -9,7 +9,7 @@ settings. Changing a rule means bumping one package version, not editing nine re
 ## Installation
 
 ```xml
-<PackageReference Include="Personix.CodeStyle" Version="1.0.2" PrivateAssets="all" />
+<PackageReference Include="Personix.CodeStyle" Version="1.0.3" PrivateAssets="all" />
 ```
 
 `PrivateAssets="all"` keeps the rules from flowing to consumers of your package — they govern your
@@ -25,6 +25,7 @@ repository at once.
 | `IDE0005` | warning | No unused `using` directives. |
 | `IDE0051` / `IDE0052` | warning | No unread private members. |
 | `IDE0060` | suggestion | Unused parameters. |
+| `IDE1006` | warning | Private field naming: `_underscore` on instance fields, `PascalCase` on `const` and `static readonly` ones. |
 
 Braces are an error rather than a warning on purpose: the failure mode is a second statement added
 under an unbraced `if`, which silently falls outside the condition and reads as if it did not.

@@ -31,3 +31,44 @@ dotnet_diagnostic.IDE0052.severity = warning
 # Empty catch blocks and unused parameters are usually a mistake rather than intent.
 dotnet_diagnostic.CA1031.severity = none
 dotnet_diagnostic.IDE0060.severity = suggestion
+
+# --- Naming -----------------------------------------------------------------
+# Private instance fields carry an underscore, so a bare name in a method body is a local and a
+# prefixed one is state. Nothing enforced this before, and the convention was held by hand until it
+# was not — an underscore dropped during a rename reads as perfectly ordinary code.
+#
+# Three rules, and the order matters: the first match wins, so the two narrow ones have to come
+# before the general one, or it would claim every private field before they are reached.
+dotnet_diagnostic.IDE1006.severity = warning
+
+# A private const is a constant and reads like one. The underscore would say "instance state", which
+# is the opposite of what it is.
+dotnet_naming_rule.private_const_fields_are_pascal_case.severity = warning
+dotnet_naming_rule.private_const_fields_are_pascal_case.symbols = private_const_fields
+dotnet_naming_rule.private_const_fields_are_pascal_case.style = pascal_case
+
+dotnet_naming_symbols.private_const_fields.applicable_kinds = field
+dotnet_naming_symbols.private_const_fields.applicable_accessibilities = private
+dotnet_naming_symbols.private_const_fields.required_modifiers = const
+
+# Private static readonly fields are constants in all but the keyword, so they follow the same shape.
+dotnet_naming_rule.private_static_readonly_fields_are_pascal_case.severity = warning
+dotnet_naming_rule.private_static_readonly_fields_are_pascal_case.symbols = private_static_readonly_fields
+dotnet_naming_rule.private_static_readonly_fields_are_pascal_case.style = pascal_case
+
+dotnet_naming_symbols.private_static_readonly_fields.applicable_kinds = field
+dotnet_naming_symbols.private_static_readonly_fields.applicable_accessibilities = private
+dotnet_naming_symbols.private_static_readonly_fields.required_modifiers = static, readonly
+
+dotnet_naming_style.pascal_case.capitalization = pascal_case
+
+# Everything else private gets the underscore.
+dotnet_naming_rule.private_fields_are_underscore_camel_case.severity = warning
+dotnet_naming_rule.private_fields_are_underscore_camel_case.symbols = private_fields
+dotnet_naming_rule.private_fields_are_underscore_camel_case.style = underscore_camel_case
+
+dotnet_naming_symbols.private_fields.applicable_kinds = field
+dotnet_naming_symbols.private_fields.applicable_accessibilities = private
+
+dotnet_naming_style.underscore_camel_case.capitalization = camel_case
+dotnet_naming_style.underscore_camel_case.required_prefix = _
