@@ -3,7 +3,7 @@
   <PropertyGroup>
     <IsPackable>true</IsPackable>
     <PackageId>Personix.CodeStyle</PackageId>
-    <Version>1.0.3</Version>
+    <Version>1.0.4</Version>
     <PackageReleaseNotes>1.0.3 — IDE1006 naming rules for private fields: an underscore on instance fields, PascalCase on const and static readonly ones.</PackageReleaseNotes>
     <Authors>Pavel Kudrna</Authors>
     <Company>Personix</Company>

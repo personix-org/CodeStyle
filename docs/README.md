@@ -26,9 +26,15 @@ repository at once.
 | `IDE0051` / `IDE0052` | warning | No unread private members. |
 | `IDE0060` | suggestion | Unused parameters. |
 | `IDE1006` | warning | Private field naming: `_underscore` on instance fields, `PascalCase` on `const` and `static readonly` ones. |
+| `IDE0022` | silent | Block bodies for methods — a rule for what the IDE generates, not for what is already written. |
 
 Braces are an error rather than a warning on purpose: the failure mode is a second statement added
 under an unbraced `if`, which silently falls outside the condition and reads as if it did not.
+
+`IDE0022` is silent for the opposite reason. It exists so that implementing an interface or base
+member produces a method with a body to fill in rather than an expression to unwrap first. Whether
+a finished method reads better as one or the other is a judgement per method, so nothing is
+underlined and code cleanup leaves settled code alone.
 
 Alongside the analyzer rules, the package fails the build on a handful of conventions that no
 analyzer covers. All of them are errors, because each describes something that is either agreed or

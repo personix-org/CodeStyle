@@ -12,6 +12,18 @@ global_level = 100
 csharp_prefer_braces = true
 dotnet_diagnostic.IDE0011.severity = error
 
+# --- Expression bodies ------------------------------------------------------
+# Block bodies for methods, and this rule is about what the IDE writes rather than about what is
+# already written. On `true`, asking it to implement an interface or base member produces an
+# expression body on a method that is about to be given several statements, and every generated
+# member has to be unwrapped by hand before it can be filled in.
+#
+# Silent on purpose, so it governs generation and nothing else. Which of the two forms reads better
+# is a judgement per method, and a visible severity would underline every expression-bodied method
+# in a repository that has settled on them — with code cleanup on save rewriting them wholesale.
+csharp_style_expression_bodied_methods = false
+dotnet_diagnostic.IDE0022.severity = silent
+
 # --- Namespaces -------------------------------------------------------------
 csharp_style_namespace_declarations = file_scoped
 dotnet_diagnostic.IDE0161.severity = warning
