@@ -3,8 +3,8 @@
   <PropertyGroup>
     <IsPackable>true</IsPackable>
     <PackageId>Personix.CodeStyle</PackageId>
-    <Version>1.0.4</Version>
-    <PackageReleaseNotes>1.0.3 — IDE1006 naming rules for private fields: an underscore on instance fields, PascalCase on const and static readonly ones.</PackageReleaseNotes>
+    <Version>1.0.5</Version>
+    <PackageReleaseNotes>1.0.5 — Release notes brought up to date, no rule changes. 1.0.4 made IDE0022 give generated methods a block body instead of an expression body. 1.0.3 added IDE1006 naming rules for private fields.</PackageReleaseNotes>
     <Authors>Pavel Kudrna</Authors>
     <Company>Personix</Company>
     <Product>Personix.CodeStyle</Product>
