@@ -3,26 +3,43 @@
   <PropertyGroup>
     <IsPackable>true</IsPackable>
     <PackageId>Personix.CodeStyle</PackageId>
-    <Version>1.0.5</Version>
-    <PackageReleaseNotes>1.0.5 — Release notes brought up to date, no rule changes. 1.0.4 made IDE0022 give generated methods a block body instead of an expression body. 1.0.3 added IDE1006 naming rules for private fields.</PackageReleaseNotes>
+    <Version>1.1.0</Version>
+    <PackageReleaseNotes>1.1.0 — adds an analyzer with PERSONIX005 (setter used only during object creation should be init) and PERSONIX006 (init property set at every creation should be required). 1.0.5 — Release notes brought up to date, no rule changes. 1.0.4 made IDE0022 give generated methods a block body instead of an expression body. 1.0.3 added IDE1006 naming rules for private fields.</PackageReleaseNotes>
     <Authors>Pavel Kudrna</Authors>
     <Company>Personix</Company>
     <Product>Personix.CodeStyle</Product>
-    <Description>Shared code style rules for Personix .NET projects, delivered as a global AnalyzerConfig. Referencing the package turns the agreed style rules — braces on every control-flow statement among them — into build errors, so the rules hold in CI instead of relying on everyone having the same editor settings.</Description>
+    <Description>Shared code style rules for Personix .NET projects, delivered as a global AnalyzerConfig together with a small analyzer for rules no built-in one covers. Referencing the package turns the agreed style rules — braces on every control-flow statement among them — into build errors, so the rules hold in CI instead of relying on everyone having the same editor settings.</Description>
     <Copyright>Copyright (c) 2026 Personix</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/personix-org/CodeStyle</PackageProjectUrl>
     <RepositoryUrl>https://github.com/personix-org/CodeStyle</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageTags>codestyle;analyzers;editorconfig;globalconfig;code-quality;build</PackageTags>
+    <PackageTags>codestyle;analyzers;roslyn;editorconfig;globalconfig;code-quality;build</PackageTags>
     <Deterministic>true</Deterministic>
 
-    <!-- Build assets only: the package ships configuration, not an assembly. -->
+    <!-- The package ships build assets and an analyzer, never a compile reference. -->
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <DevelopmentDependency>true</DevelopmentDependency>
     <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
     <NoWarn>$(NoWarn);NU5128</NoWarn>
   </PropertyGroup>
+
+  <!--
+    The analyzer assembly ships inside this package under analyzers/dotnet/cs. It is built through
+    the project reference and never becomes a compile reference of the package itself.
+  -->
+  <ItemGroup>
+    <ProjectReference Include="..\Personix.CodeStyle.Analyzers\Personix.CodeStyle.Analyzers.csproj" ReferenceOutputAssembly="false" />
+  </ItemGroup>
+
+  <Target Name="PersonixPackAnalyzer" BeforeTargets="_GetPackageFiles">
+    <MSBuild Projects="..\Personix.CodeStyle.Analyzers\Personix.CodeStyle.Analyzers.csproj" Targets="GetTargetPath">
+      <Output TaskParameter="TargetOutputs" ItemName="PersonixAnalyzerAssembly" />
+    </MSBuild>
+    <ItemGroup>
+      <None Include="@(PersonixAnalyzerAssembly)" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+    </ItemGroup>
+  </Target>
 
   <ItemGroup>
     <None Include="build\Personix.CodeStyle.props" Pack="true" PackagePath="build\" />

@@ -5,6 +5,11 @@
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
   </PropertyGroup>
 
+  <!-- PERSONIX005 and PERSONIX006 skip externally visible members of packable projects. -->
+  <ItemGroup>
+    <CompilerVisibleProperty Include="IsPackable" />
+  </ItemGroup>
+
   <ItemGroup>
     <EditorConfigFiles Include="$(MSBuildThisFileDirectory)Personix.CodeStyle.globalconfig" />
   </ItemGroup>

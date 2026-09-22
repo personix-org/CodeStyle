@@ -84,3 +84,10 @@ dotnet_naming_symbols.private_fields.applicable_accessibilities = private
 
 dotnet_naming_style.underscore_camel_case.capitalization = camel_case
 dotnet_naming_style.underscore_camel_case.required_prefix = _
+
+# --- Property accessors -----------------------------------------------------
+# PERSONIX005 and PERSONIX006 come from the analyzer shipped in this package. A setter that nothing
+# uses after construction becomes init, and an init property every creation site sets becomes
+# required, so the declaration states what the code already relies on.
+dotnet_diagnostic.PERSONIX005.severity = warning
+dotnet_diagnostic.PERSONIX006.severity = warning

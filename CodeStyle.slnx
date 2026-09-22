@@ -4,5 +4,9 @@
   </Folder>
   <Folder Name="/src/">
     <Project Path="src/Personix.CodeStyle/Personix.CodeStyle.csproj" Type="Classic C#" />
+    <Project Path="src/Personix.CodeStyle.Analyzers/Personix.CodeStyle.Analyzers.csproj" Type="Classic C#" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Personix.CodeStyle.Analyzers.Tests/Personix.CodeStyle.Analyzers.Tests.csproj" Type="Classic C#" />
   </Folder>
 </Solution>
